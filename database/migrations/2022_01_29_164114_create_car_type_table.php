@@ -14,8 +14,11 @@ class CreateCarTypeTable extends Migration
     public function up()
     {
         Schema::create('car_type', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('type_id');
+            $table->unsignedBigInteger('card_id');
+            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('card_id')->references('id')->on('cards');
         });
     }
 
