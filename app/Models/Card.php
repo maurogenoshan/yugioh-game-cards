@@ -16,7 +16,7 @@ class Card extends Model
         return $this->belongsToMany(Type::class);
     }
 
-    public static function filterPaginate($request)
+    public function filterPaginate($request)
     {
 
         $where_clauses = [];
@@ -36,8 +36,8 @@ class Card extends Model
             $where_clauses['first_edition'] = $request->input('first_edition');
         }
         if (!empty($where_clauses)) {
-            return self::where($where_clauses)->paginate($request->input('per_page'));
+            return $this->with('types')->where($where_clauses)->paginate($request->input('per_page'));
         }
-        return self::paginate($request->input('per_page'));
+        return $this->with('types')->paginate($request->input('per_page'));
     }
 }
