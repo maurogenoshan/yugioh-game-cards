@@ -10,6 +10,7 @@ class Card extends Model
 {
     use HasFactory;
     private $where_clauses;
+    public $timestamps = false;
 
     public function types()
     {
