@@ -22,7 +22,7 @@ class CreateCardsTable extends Migration
             $table->enum('DEF', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
             $table->enum('starts', ['1', '2', '3', '4', '5']);
             $table->string('description', 255)->nullable();
-            $table->string('image', 50);
+            $table->string('image', 100);
             $table->date('date_created')->nullable();
         });
     }
