@@ -13,7 +13,7 @@ class CreateCarTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('car_type', function (Blueprint $table) {
+        Schema::create('card_type', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('card_id');
