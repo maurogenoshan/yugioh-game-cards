@@ -2,7 +2,7 @@
 
 ## Yugioh Rest Api
 
-A restfull Api based in Laravel
+A restfull Api based in Laravel 8
 
 ##  Instalación
 
