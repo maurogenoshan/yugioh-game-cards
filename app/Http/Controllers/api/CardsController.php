@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Card;
+
 use App\Http\Resources\Card as CardResource;
 use Illuminate\Support\Str;
 use App\Http\Requests\CardStoreRequest;
@@ -15,8 +16,9 @@ class CardsController extends BaseController
 
     public function index(Request $request)
     {
-        $card = new Card;
-        return CardResource::collection($card->filterPaginate($request));
+        $cards = Card::with('types:id,name,parent_id')->Filter($request)->Paginate($request->input('per_page'));
+
+        return $this->sendResponse(CardResource::collection($cards), "Post all");
     }
 
     public function store(CardStoreRequest $request)
@@ -37,14 +39,15 @@ class CardsController extends BaseController
         return $nombreimagen;
     }
 
-    public function show($id)
+    public function show(Card $card)
     {
-        return new CardResource(Card::findOrFail($id));
+        return new CardResource($card::with('types:id,name,parent_id'));
     }
 
     public function update(CardStoreRequest $request, Card $card)
     {
         $inputs = $request->validated();
+        $inputs['image'] = $this->uploadImage($request);
         $card->update($inputs);
         $card->save();
 
@@ -53,6 +56,8 @@ class CardsController extends BaseController
 
     public function destroy(Card $card)
     {
+
+        $card->types()->detach();
         $card->delete();
         return $this->sendResponse([], 'Post deleted.');
     }
