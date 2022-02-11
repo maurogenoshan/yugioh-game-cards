@@ -11,15 +11,14 @@ class Card extends Model
     use HasFactory;
     private $where_clauses;
     public $timestamps = false;
-
+   
     public function types()
     {
         return $this->belongsToMany(Type::class);
     }
 
-    public function filterPaginate($request)
+    public function scopeFilter($query, $request)
     {
-
         $where_clauses = [];
         if ($request->has('DEF')) {
             $where_clauses['DEF'] = $request->input('DEF');
@@ -37,8 +36,15 @@ class Card extends Model
             $where_clauses['first_edition'] = $request->input('first_edition');
         }
         if (!empty($where_clauses)) {
-            return $this->with('types')->where($where_clauses)->paginate($request->input('per_page'));
+            return $query->where($where_clauses);
         }
-        return $this->with('types')->paginate($request->input('per_page'));
+    }
+
+    public function scopePaginate($query, $per_page)
+    {
+
+        if (!empty($per_page)) {
+            return $query->paginate($per_page);
+        }
     }
 }
