@@ -4,8 +4,9 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Requests\AuthRegisterequest;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+
 use App\Models\User;
    
 class AuthController extends BaseController
@@ -25,20 +26,9 @@ class AuthController extends BaseController
         } 
     }
 
-    public function signup(Request $request)
+    public function signup(AuthRegisterequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'confirm_password' => 'required|same:password',
-        ]);
-   
-        if($validator->fails()){
-            return $this->sendError('Error validation', $validator->errors());       
-        }
-   
-        $input = $request->all();
+        $input = $request->validate();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyAuthApp')->plainTextToken;
