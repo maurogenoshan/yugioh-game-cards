@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Card;
 
-use App\Http\Resources\Card as CardResource;
+use App\Http\Resources\CardResource;
 use Illuminate\Support\Str;
 use App\Http\Requests\CardStoreRequest;
 
 
-class CardsController extends BaseController
+class CardsController extends Controller
 {
 
     public function index(Request $request)
     {
-        $cards = Card::with('types:id,name,parent_id')->Filter($request)->Paginate($request->input('per_page'));
+        $cards = Card::with('types')->Filter($request)->Paginate($request->input('per_page'));
 
-        return $this->sendResponse(CardResource::collection($cards), "Post all");
+        return CardResource::collection($cards);
     }
 
     public function store(CardStoreRequest $request)

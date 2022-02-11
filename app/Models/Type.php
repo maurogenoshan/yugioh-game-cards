@@ -9,10 +9,10 @@ class Type extends Model
 {
     use HasFactory;
 
-    public function subtype()
+    public function parenttype()
     {
 
-        return $this->hasMany('App\Type', 'parent_id');
+        return $this->hasMany('App\Models\Type', 'parent_id');
     }
 
     public function scopeHasParent($query)
